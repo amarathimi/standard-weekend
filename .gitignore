@@ -1,3 +1,13 @@
-# ignore library file
-# http://docs.unity3d.com/Documentation/Manual/ExternalVersionControlSystemSupport.html
+# https://github.com/WhatATwist/The-Chroma-Project/wiki/Git-And-Unity-3.5
+# Ignore The following directories / file extensions
 Library/
+Temp/
+
+# Ignore the following file extensions
+*.exe
+*.vcproject
+*.sln
+*.csproj
+*.pidb
+*.userprefs
+.DS_Store
