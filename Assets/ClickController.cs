@@ -3,58 +3,72 @@ using System.Collections;
 
 public class ClickController : MonoBehaviour {
 	
-	private bool objectSelected = false;
+	// selected ActionObject info
+	private bool mouseHeldOverActionObject = false;
 	private Vector3 clickedMousePosition;
-	//private Vector3 clickedPoint;
-	//private GameObject clickedObject;
+	private GameObject clickedObject;
 	private float clickStartTime = 0.0f;
 	
+	// Display when selected ActionObject
+	// what is displayed depends from object
 	private bool displayObjectActionMenu = false;
 	private static float DISPLAY_MENU_TIME = 0.15f;
+	
+	// possible actions
+	private enum enCharacterAction {NoAction, Walk, Look, Use, PickUp};
+	private enCharacterAction selectedAction;
+	
+	// Action icons
 	//public Texture actionIcon;
 	
 	// Use this for initialization
 	void Start () {
-	
+		selectedAction = enCharacterAction.NoAction;
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		
 		if (Input.GetMouseButtonDown(0)) {
 			RaycastHit hit;
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 			if (Physics.Raycast(ray, out hit)) {
-				// select clicked object
-				if (!objectSelected) {
+				if (hit.transform.gameObject.tag.Contains("ActionObject")) {
+					// save clicked object
+					mouseHeldOverActionObject = true;
+					clickedObject = hit.transform.gameObject;
 					clickStartTime = Time.time;
 					clickedMousePosition = Input.mousePosition;
-					//clickedPoint = hit.point;
-					//clickedObject = hit.transform.gameObject;
+				} else {
+					// just set moving destination
+					//hit.point
+					selectedAction = enCharacterAction.Walk;
 				}
-				objectSelected = true;
 			}
 			
 		} else if (Input.GetMouseButtonUp(0)) {
 			// perform default click action if action was not selected from menu
 			if (!displayObjectActionMenu) {
 				// default action
-				print("Default action");
-			} else {
-				// menu action or no action
+				//	print("Default action");
 			}
 			
 			// release held object
-			clickStartTime = 0.0f;
-			objectSelected = false;
-			displayObjectActionMenu = false;
+			if (mouseHeldOverActionObject) {
+				clickStartTime = 0.0f;
+				mouseHeldOverActionObject = false;
+				displayObjectActionMenu = false;
+			}
 		}
 		
-		if (objectSelected) {			
+		if (mouseHeldOverActionObject) {			
 			// display action menu if mouse is held long enough
 			if (Time.time - clickStartTime >= DISPLAY_MENU_TIME) {
 				displayObjectActionMenu = true;
 			}
 		}
+		
+		print (selectedAction);
 		
 	}
 	
