@@ -3,6 +3,12 @@
 Library/
 Temp/
 
+# Ignore external libraries
+Assets/iTween/
+Assets/Pixelplacement/
+Assets/iTween.meta
+Assets/Pixelplacement.meta
+
 # Ignore the following file extensions
 *.exe
 *.vcproject
