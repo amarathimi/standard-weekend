@@ -29,7 +29,40 @@ public class ObjectActionManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if (Input.GetMouseButtonDown(0)) {
+			RaycastHit hit;
+			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+			if (Physics.Raycast(ray, out hit)) {
+				if (!hit.transform.gameObject.tag.Contains("ActionObject")) {
+					// clicked something else than an action object or game character.
+					GameObject closestGoalPoint = FindClosestGoalPoint(hit.point);
+					if (closestGoalPoint != null) {
+						// set player destination to goal point
+						print (closestGoalPoint.name);
+						GameObject player = GameObject.FindGameObjectWithTag("Player");
+						player.GetComponent<TestMoveScript>().SetMoveDestination(closestGoalPoint); 
+					}
+				}
+			}
+			
+		}
+	}
 	
+	GameObject FindClosestGoalPoint(Vector3 location) {
+		GameObject[] goalPoints = GameObject.FindGameObjectsWithTag("GoalPoint");
+		
+		GameObject closestGoalPoint = null;
+		float distance = Mathf.Infinity;
+		
+		foreach (GameObject goalPoint in goalPoints) {
+			float currentDistance = (goalPoint.transform.position - location).sqrMagnitude;
+			if (currentDistance < distance) {
+				closestGoalPoint = goalPoint;
+				distance = currentDistance;
+			}
+		}
+		
+		return closestGoalPoint;
 	}
 	
 	/**
